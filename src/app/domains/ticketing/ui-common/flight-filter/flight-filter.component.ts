@@ -40,12 +40,14 @@ export class FlightFilterComponent {
     effect(() => this.inputFilterForm.patchValue(this.localStore.selectedFilter()), {
       allowSignalWrites: true
     });
-    effect(() => this.selectedFilterControl.setValue(this.localStore.latestFilter()), {
+    effect(() => this.selectedFilterControl.setValue(this   .localStore.latestFilter()), {
       allowSignalWrites: true
     });
     effect(() => {
       const latestFilter = this.localStore.latestFilter();
       latestFilter && this.searchTrigger.emit(latestFilter);
+    }, {
+      allowSignalWrites: true
     });
   }
 }

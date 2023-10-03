@@ -1,22 +1,25 @@
 <h2 class="title">Flight Search</h2>
 
 <app-flight-filter
-  [filter]="filter"
+  [filter]="vm.filter()"
   (searchTrigger)="search($event)"
 >
   <button class="btn btn-default" (click)="delay()">
     Delay 1st Flight
   </button>
 
-  <div *ngIf="flights.length" class="flight-filter-info">
-    {{flights.length}} flights found!
+  <div *ngIf="vm.flights().length" class="flight-filter-info">
+    {{vm.flights().length}} flights found!
   </div>
 </app-flight-filter>
 
 <div class="row">
-  <div *ngFor="let f of flights" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
-    <app-flight-card [item]="f" [(selected)]="basket[f.id]" />
+  <div *ngFor="let f of vm.flights()" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
+    <app-flight-card
+      [item]="f"
+      [selected]="vm.basket()[f.id]"
+      (selectedChange)="updateBasket(f.id, $event)" />
   </div>
 </div>
 
-<pre>{{ basket | json }}</pre>
+<pre>{{ vm.basket() | json }}</pre>
