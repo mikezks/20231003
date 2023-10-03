@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, effect, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, effect, inject, untracked } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FlightFilter } from '../../data';
 import { FlightFilterStore } from './flight-filter.store';
@@ -40,14 +40,14 @@ export class FlightFilterComponent {
     effect(() => this.inputFilterForm.patchValue(this.localStore.selectedFilter()), {
       allowSignalWrites: true
     });
-    effect(() => this.selectedFilterControl.setValue(this   .localStore.latestFilter()), {
+    effect(() => this.selectedFilterControl.setValue(this.localStore.latestFilter()), {
       allowSignalWrites: true
     });
     effect(() => {
       const latestFilter = this.localStore.latestFilter();
-      latestFilter && this.searchTrigger.emit(latestFilter);
-    }, {
-      allowSignalWrites: true
+      latestFilter && untracked(() => {
+        this.searchTrigger.emit(latestFilter);
+      })
     });
   }
 }
